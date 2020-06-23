@@ -6,6 +6,7 @@
         class="close-icon"
         src="../../assets/images/icons/close.png"
         alt=""
+        title="Close"
       />
       <div class="image-container">
         <div class="resource-image"></div>

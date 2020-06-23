@@ -4,8 +4,8 @@
       {{ question }}
     </p>
     <div class="buttons">
-      <img class="icon-btn" @click="$emit('open-resouce-modal')" src="../assets/images/icons/resource.png" alt="" />
-      <img class="icon-btn" @click="$emit('open-help-modal')" src="../assets/images/icons/help.png" alt="" />
+      <img class="icon-btn" title="Open resources" @click="$emit('open-resouce-modal')" src="../assets/images/icons/resource.png" alt="" />
+      <img class="icon-btn" title="help" @click="$emit('open-help-modal')" src="../assets/images/icons/help.png" alt="" />
     </div>
   </div>
 </template>

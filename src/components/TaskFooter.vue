@@ -1,8 +1,8 @@
 <template>
   <div class="task-footer">
     <div class="buttons">
-      <img class="reset-btn" @click="$emit('reset-all')" src="../assets/images/icons/reset.png" alt="" />
-      <img class="solve-btn" @click="$emit('show-answers')" src="../assets/images/icons/solve.png" alt="" />
+      <img class="reset-btn" title="Reset" @click="$emit('reset-all')" src="../assets/images/icons/reset.png" alt="" />
+      <img class="solve-btn" title="Show answers" @click="$emit('show-answers')" src="../assets/images/icons/solve.png" alt="" />
     </div>
   </div>
 </template>

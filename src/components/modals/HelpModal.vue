@@ -6,6 +6,7 @@
         class="close-icon"
         src="../../assets/images/icons/close.png"
         alt=""
+        title="Close"
       />
       <p class="help-hint">
       Help content goes here.
