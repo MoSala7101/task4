@@ -86,72 +86,71 @@ export default {
   },
   methods: {
     scalePage() {
-      console.log("zoom", window.devicePixelRatio);
-
       /* get the window width */
       let windowWidth = window.innerWidth;
-      console.log("Value of: scalePage -> windowWidth", windowWidth);
 
       /* scale 1  */
       let appWidth = 840;
 
-      /* scale according to thw width */
-      /* then 840 * scale = width - height */
-
+      /* get the app  */
       const theApp = document.querySelector("#app");
+      /* set the initial width */
       theApp.style.width = `${appWidth}px`;
 
+      /* check if window has resized */
       if (windowWidth <= 840) {
-        /* get the difference between the app dimenstion and the windw */
+        /* get the difference between the app width and the window width */
         let widthDif = window.innerWidth - theApp.offsetWidth;
-
+        /* get the percentage of change */
         let diffPercent = widthDif / 840;
-        console.log("Value of: scalePage -> diffPercent", diffPercent);
-
+        /* calculate the new scale to match the window new width */
         let scale = 1 + diffPercent;
-        console.log("Value of: scalePage -> scale", scale);
-
+        /* scale the app */
         theApp.style.transform = `scale(${scale})`;
       } else {
-        console.log("Window bigger than 840");
+        /* if window width > 840 then there is no need to scale the app */
         theApp.style.transform = "scale(1)";
       }
-
-      /* in case of zooming */
     },
 
-    /* Task Content Functions */
+    /**************************************
+    TASK CONTENT COMPONENT FUNCTIONS START
+    ************************************ */
+
+    /* this function is called when a choice button is clicked */
     choiceSelected(id) {
       /* remove all selected classes */
       let allAnswers = document.querySelectorAll(".answer-btn");
       for (let i = 0; i < allAnswers.length; i++) {
         allAnswers[i].classList.remove("selected");
       }
-
-      console.log(id);
+      /* get the clicked button */
       let clickedBtn = document.getElementById(id);
+      /* change clicked button style */
       clickedBtn.classList.add("selected");
-
       /* update current selected word */
       this.currentSelected = clickedBtn.innerText;
     },
 
+    /* this function is called when an answr place is clicked */
     checkAnswer(id) {
-      /* make sure that the is not equal to the empty place '2' */
+      /* make sure that the is not equal to the dummy place '2' */
       if (id !== 2) {
         let selectedAnswer = this.currentSelected;
         console.log("Value of: checkAnswer -> selectedAnswer", selectedAnswer);
         /* check if the answer is in the answers array */
         let answerIndex = this.answers.indexOf(selectedAnswer);
-
         if (answerIndex == -1) {
-          console.log("Incorrect Answer");
-          /* handling the wron answer */
+          /* the selected answer is not correct */
+
+          /* get the clicked answer place */
           let clickedPlace = this.answerPlaces.filter(
             (place) => place.id === id
           );
-          console.log("Value of: checkAnswer -> clickedPlace", clickedPlace[0]);
+
+          /* check if there is a choosen choice */
           if (selectedAnswer.length > 0) {
+            /* show the select INCORRECT word for 0.5 second */
             clickedPlace[0].text = selectedAnswer;
             clickedPlace[0].isFilled = true;
             setTimeout(() => {
@@ -160,16 +159,18 @@ export default {
             }, 500);
           }
         } else {
+          /* then the clicked place is not the dummy one */
+          /* get the clicked place */
           let clickedPlace = this.answerPlaces.filter(
             (place) => place.id === id
           );
-
+          /* check if clicked place is empty */
           if (!clickedPlace.isFilled) {
             clickedPlace[0].isCorrect = true;
             clickedPlace[0].text = selectedAnswer;
             clickedPlace[0].isFilled = true;
 
-            /* remove answer from choices */
+            /* remove the CORRECT selected answer button from the available choices */
             let previousChoice = this.choices.filter(
               (choice) => choice.text == selectedAnswer
             );
@@ -178,16 +179,17 @@ export default {
             /* clear the current selected */
             this.currentSelected = "";
 
-            /* check selected answers */
+            /* get all vailable places (without the dummy one) */
             let allPlaces = this.answerPlaces.filter((place) => place.id !== 2);
 
+            /* get the filled places */
             let filledPlaces = allPlaces.filter(
               (place) => place.isFilled === true
             );
 
+            /* check the count of filled places */
             if (filledPlaces.length == 5) {
-              console.log("ALL ANSWERS DONE");
-
+              /* then all answer fields are filled with correct answers */
               /* disable all remaining buttons */
               let allAnswersButtons = document.querySelectorAll(".answer-btn");
               for (let i = 0; i < allAnswersButtons.length; i++) {
@@ -198,18 +200,28 @@ export default {
         }
       }
     },
+
+    /************************************
+    TASK CONTENT COMPONENT FUNCTIONS END
+    ********************************** */
+
+    /**************************************
+    TASK FOOTER COMPONENT FUNCTIONS START
+    ************************************ */
+
+    /* this function is called when the reset icon is pressed */
     resetAll() {
       /* reset answer buttons */
       let allAnswersButtons = document.querySelectorAll(".answer-btn");
-
       for (let i = 0; i < allAnswersButtons.length; i++) {
         allAnswersButtons[i].classList.remove("disabled");
         allAnswersButtons[i].classList.remove("notVisible");
       }
 
-      /* choices */
+      /* reset choices availability */
       this.choices.map((choice) => (choice.isAvailable = true));
-      /* reset answerPlaces */
+
+      /* reset answerPlaces availability and text */
       this.answerPlaces.filter((place) => {
         place.text = "";
         place.isFilled = false;
@@ -217,12 +229,12 @@ export default {
       });
     },
 
-    /* show answers */
+    /* this function is called when the show answers icon is pressed */
     showAnswers() {
       let availablePlaces = this.answerPlaces.filter((place) => place.id !== 2);
       console.log("Value of: showAnswers -> availablePlaces", availablePlaces);
 
-      /* loop for the places */
+      /* loop for the places and puth the CORRECT answers in each place */
       for (let i = 0; i < this.answers.length; i++) {
         /* put each answer in an answerplace */
         availablePlaces[i].isFilled = true;
@@ -230,12 +242,11 @@ export default {
         availablePlaces[i].isCorrect = true;
       }
 
-      /* hide all answers buttons from the header */
+      /* hide all CORRECT choices buttons */
       let selectedAnswersButtons = document.querySelectorAll(".answer-btn");
       for (let i = 0; i < selectedAnswersButtons.length; i++) {
         /* get the button text */
         let buttonText = selectedAnswersButtons[i].innerText;
-        console.log("Value of: showAnswers -> buttonText", buttonText);
         /* check if this button text is thhe answers array */
         let answerIndex = this.answers.indexOf(buttonText);
         if (answerIndex != -1) {
@@ -245,6 +256,10 @@ export default {
         selectedAnswersButtons[i].classList.add("disabled");
       }
     },
+
+    /**************************************
+    TASK FOOTER COMPONENT FUNCTIONS END
+    ************************************ */
   },
 };
 </script>
